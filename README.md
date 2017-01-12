@@ -1,6 +1,10 @@
 # docker-teamcity-android
 Simple docker agent with android sdk inside it
 
+## Building
+You may put trust certificates which will be avaliable in Java inside container in `trust-certs`
+and call `docker build`
+
 
 ## Starting
 
