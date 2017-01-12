@@ -4,4 +4,6 @@
 # But not these files...
 !.gitignore
 !Dockerfile
+!LICENSE
+!README.md
 !trust-certs
