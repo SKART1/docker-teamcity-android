@@ -1,5 +1,15 @@
 FROM jetbrains/teamcity-agent
 
+#Certificates
+COPY trust-certs/ /usr/local/share/ca-certificates/
+RUN update-ca-certificates && \
+    ls -1 /usr/local/share/ca-certificates | while read cert; do \
+        openssl x509 -outform der -in /usr/local/share/ca-certificates/$cert -out $cert.der; \
+        ${JRE_HOME}/bin/keytool -import -alias $cert -keystore ${JRE_HOME}/lib/security/cacerts -trustcacerts -file $cert.der -storepass changeit -noprompt; \
+        rm $cert.der; \
+    done
+
+
 #Packages for sdk
 RUN dpkg --add-architecture i386 \
     && apt-get update \
