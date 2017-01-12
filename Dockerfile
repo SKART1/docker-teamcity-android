@@ -1,15 +1,5 @@
 FROM jetbrains/teamcity-agent
 
-#Certificates
-COPY trust-certs/ /usr/local/share/ca-certificates/
-RUN update-ca-certificates && \
-    ls -1 /usr/local/share/ca-certificates | while read cert; do \
-        openssl x509 -outform der -in /usr/local/share/ca-certificates/$cert -out $cert.der; \
-        ${JRE_HOME}/bin/keytool -import -alias $cert -keystore ${JRE_HOME}/lib/security/cacerts -trustcacerts -file $cert.der -storepass changeit -noprompt; \
-        rm $cert.der; \
-    done
-
-
 #Packages for sdk
 RUN dpkg --add-architecture i386 \
     && apt-get update \
@@ -37,3 +27,12 @@ RUN cd /opt \
     && tar -xzf ${ANDROID_SDK_FILENAME} \
     && rm ${ANDROID_SDK_FILENAME} \
     && echo y | android update sdk --no-ui -a --filter tools,platform-tools,extra,${ANDROID_API_LEVELS},build-tools-${ANDROID_BUILD_TOOLS_VERSION},${EXTRA_PACKAGES}
+
+#Certificates for java
+COPY trust-certs/ /usr/local/share/ca-certificates/
+RUN update-ca-certificates && \
+    ls -1 /usr/local/share/ca-certificates | while read cert; do \
+        openssl x509 -outform der -in /usr/local/share/ca-certificates/$cert -out $cert.der; \
+        ${JRE_HOME}/bin/keytool -import -alias $cert -keystore ${JRE_HOME}/lib/security/cacerts -trustcacerts -file $cert.der -storepass changeit -noprompt; \
+        rm $cert.der; \
+    done

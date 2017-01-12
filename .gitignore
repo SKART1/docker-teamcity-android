@@ -1,9 +1,9 @@
- # Ignore everything
- *
-
+# Ignore everything
+*
+/trust-certs/*
+ 
 # But not these files...
 !.gitignore
 !Dockerfile
 !LICENSE
 !README.md
-!trust-certs
