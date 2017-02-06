@@ -10,8 +10,8 @@ RUN dpkg --add-architecture i386 \
     
 #Android sdk settings
 ENV ANDROID_SDK_VERSION=r24.4.1 \
-    ANDROID_BUILD_TOOLS_VERSION=24.0.2 \
-    ANDROID_API_LEVELS=android-22,android-23,android-24 \
+    ANDROID_BUILD_TOOLS_VERSION=25.0.2 \
+    ANDROID_API_LEVELS=android-22,android-23,android-24,android-25 \
     EXTRA_PACKAGES=build-tools-23.0.3 \
     \
     ANDROID_HOME=/opt/android-sdk-linux 
