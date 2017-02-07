@@ -1,5 +1,12 @@
 FROM jetbrains/teamcity-agent
 
+#All
+ENV DEBIAN_FRONTEND=noninteractive
+
+#Java
+ENV ORACLE_JDK=/usr/lib/jvm/oracle-jdk/jre/ \
+    OPEN_JDK=/usr/lib/jvm/java-1.8.0-openjdk-amd64/jre
+
 #Packages for sdk
 RUN dpkg --add-architecture i386 \
     && apt-get update \
@@ -33,6 +40,9 @@ COPY trust-certs/ /usr/local/share/ca-certificates/
 RUN update-ca-certificates && \
     ls -1 /usr/local/share/ca-certificates | while read cert; do \
         openssl x509 -outform der -in /usr/local/share/ca-certificates/$cert -out $cert.der; \
-        ${JRE_HOME}/bin/keytool -import -alias $cert -keystore ${JRE_HOME}/lib/security/cacerts -trustcacerts -file $cert.der -storepass changeit -noprompt; \
+        #Oracle jdk
+        ${ORACLE_JDK}/bin/keytool -import -alias $cert -keystore ${ORACLE_JDK}/lib/security/cacerts -trustcacerts -file $cert.der -storepass changeit -noprompt; \
+        #Open jdk
+        ${OPEN_JDK}/bin/keytool -import -alias $cert -keystore ${OPEN_JDK}/lib/security/cacerts -trustcacerts -file $cert.der -storepass changeit -noprompt; \
         rm $cert.der; \
     done
